@@ -1,0 +1,10 @@
+
+{
+    "reference" :
+        {
+            "fasta" : "/home/ualtintas/genomeAnnotations/hg19.fa",
+            "idx" : "/home/ualtintas/genomeAnnotations/bowtieIdx/hg19",
+            "chrSize" : "/home/ualtintas/genomeAnnotations/hg19.chrom.sizes"
+        },
+    "blacklist" : "/home/ualtintas/genomeAnnotations/ENCFF001TDO.bed"
+}

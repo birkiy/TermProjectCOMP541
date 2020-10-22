@@ -1,0 +1,17 @@
+
+{
+  "__default__" :
+  {
+      "account" : "ualtintas",
+      "time" : "23:59:00",
+      "partition" :"normal,big-mem,long"
+  },
+  "mapping" : {"c" :32, "mem":"320G"},
+  "bamProcess" : {"c" :32, "mem":"320G"},
+  "pool" : {"c" :32, "mem":"320G"},
+  "pseudoReplicates" : {"c" :8, "mem":"160G"},
+  "peakCalling" : {"c" :2, "mem":"20G"},
+  "SignalAt5end" : {"c" :2, "mem":"160G"},
+  "idr" : {"c" :2, "mem":"20G"},
+  "coverageAroundSummits" : {"c" :32, "mem":"320G"}
+}

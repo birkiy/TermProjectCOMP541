@@ -1,0 +1,28 @@
+
+
+config: "config.yaml"
+
+
+from configPY import *
+
+
+# create a list of sample list with interested output file names
+# and give it to target rule as desiredOutputList
+# you are free to give directories too.
+
+
+rule all:
+    input:
+        expand("results/{desiredOutput}",
+        desiredOutput=desiredOutputList)
+
+
+
+
+include: "../workflow/rules/mappingExo.smk"
+include: "../workflow/rules/bamProcess.smk"
+include: "../workflow/rules/pseudoReplicates.smk"
+include: "../workflow/rules/generateBigwig.smk"
+include: "../workflow/rules/peakCalling.smk"
+include: "../workflow/rules/idr.smk"
+include: "../workflow/rules/coverageAroundSummits.smk"
