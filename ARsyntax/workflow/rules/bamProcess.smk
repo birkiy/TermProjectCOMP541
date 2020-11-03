@@ -4,7 +4,7 @@
 
 rule bamProcess:
         input:
-                "results/mapping/{raw}.bam"
+                "results/mapping/{raw}.raw.bam"
         output:
                 bai="results/mapping/processed/{raw}.bam.bai",
                 bam="results/mapping/processed/{raw}.final.bam"

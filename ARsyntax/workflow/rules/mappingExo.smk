@@ -8,7 +8,7 @@ rule mapping:
         output:
                 R1=temp("rawData/{raw}.R1.fastq"),
                 R2=temp("rawData/{raw}.R2.fastq"),
-                bam="results/mapping/{raw}.bam"
+                bam="results/mapping/{raw}.raw.bam"
         message:
                 "Executing mappingExo rule for {wildcards.raw}"
         threads:

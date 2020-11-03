@@ -7,6 +7,22 @@
 ##########################
 """
 
+conda install -c conda-forge mamba
+
+mamba create -c conda-forge -c bioconda -n ARsyntax \
+  python=3.8 \
+  snakemake=5.26.1 \
+  bowtie=1.3.0 \
+  samtools=1.11 \
+  bedtools=2.29.2 \
+  macs2=2.2.7.1 \
+  idr=2.0.4.2 \
+  deeptools=3.5.0 \
+  ucss-bedGraphToBigWig=377 \
+  parallel-fastq-dump=0.6.6
+
+
+
 ```
 DATA PROCESSING
 ```
@@ -159,3 +175,53 @@ plotHeatmap -m {output.npz} \
   --sortRegions descend \
   --heatmapHeight 20 --heatmapWidth 7 \
   -out {output.pdf}
+#######################################
+
+
+
+
+
+
+
+
+#!/bin/bash
+#SBATCH --job-name=optimize
+#SBATCH --time=06:00:00
+#SBATCH --mem-per-cpu=12G
+#SBATCH --cpus-per-task=30
+#SBATCH --export=all
+#SBATCH -p long
+
+
+
+
+N=$((`samtools view LNCaP.dht.AR.rep1.bam | wc -l `))
+
+
+bedtools genomecov -bg -strand + -ibam LNCaP.dht.AR.rep1.final.bam -scale `bc -l <<< 100000000/$N` | bedtools sort > LNCaP.dht.AR.rep1.N.+.bedGraph
+echo "Number of reads:"`wc -l  LNCaP.dht.AR.rep1.N.+.bedGraph`
+bedtools intersect -v -a  LNCaP.dht.AR.rep1.N.+.bedGraph -b /home/ualtintas/genomeAnnotations/ENCFF001TDO.bed >  LNCaP.dht.AR.rep1.N.+.blk.bedGraph
+echo "Number of reads:"`wc -l LNCaP.dht.AR.rep1.N.+.blk.bedGraph`
+bedGraphToBigWig LNCaP.dht.AR.rep1.N.+.blk.bedGraph /home/ualtintas/genomeAnnotations/hg19.chrom.sizes LNCaP.dht.AR.rep1.N.+.blk.bigWig
+
+bedtools genomecov -bg -strand - -ibam LNCaP.dht.AR.rep1.final.bam -scale `bc -l <<< 100000000/$N` | bedtools sort > LNCaP.dht.AR.rep1.N.-.bedGraph
+echo "Number of reads:"`wc -l LNCaP.dht.AR.rep1.N.-.bedGraph`
+bedtools intersect -v -a LNCaP.dht.AR.rep1.N.-.bedGraph -b /home/ualtintas/genomeAnnotations/ENCFF001TDO.bed > LNCaP.dht.AR.rep1.N.-.blk.bedGraph
+echo "Number of reads:"`wc -l LNCaP.dht.AR.rep1.N.-.blk.bedGraph`
+bedGraphToBigWig LNCaP.dht.AR.rep1.N.-.blk.bedGraph /home/ualtintas/genomeAnnotations/hg19.chrom.sizes LNCaP.dht.AR.rep1.N.-.blk.bigWig
+
+
+
+
+
+bedtools genomecov -3 -bg -strand + -ibam LNCaP.dht.AR.rep1.final.bam -scale `bc -l <<< 100000000/$N` | bedtools sort > LNCaP.dht.AR.rep1.3.+.bedGraph
+
+bedtools intersect -v -a LNCaP.dht.AR.rep1.3.+.bedGraph -b /home/ualtintas/genomeAnnotations/ENCFF001TDO.bed > LNCaP.dht.AR.rep1.3.+.blk.bedGraph
+
+bedGraphToBigWig  LNCaP.dht.AR.rep1.3.+.blk.bedGraph /home/ualtintas/genomeAnnotations/hg19.chrom.sizes  LNCaP.dht.AR.rep1.3.+.blk.bigWig
+
+bedtools genomecov -3 -bg -strand - -ibam LNCaP.dht.AR.rep1.final.bam -scale `bc -l <<< 100000000/$N` | bedtools sort > LNCaP.dht.AR.rep1.3.-.bedGraph
+
+bedtools intersect -v -a LNCaP.dht.AR.rep1.3.-.bedGraph -b /home/ualtintas/genomeAnnotations/ENCFF001TDO.bed > LNCaP.dht.AR.rep1.3.-.blk.bedGraph
+
+bedGraphToBigWig LNCaP.dht.AR.rep1.3.-.blk.bedGraph /home/ualtintas/genomeAnnotations/hg19.chrom.sizes LNCaP.dht.AR.rep1.3.-.blk.bigWig
