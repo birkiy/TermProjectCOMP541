@@ -13,14 +13,14 @@ include("layers.jl")
 
 
 
-x = rand(Float32, (699,4,1,100));
-y1 = rand(Float32, (699,1,2,100));
-y2 = rand(Float32, (1,1,2, 100));
+x = rand(Float32, (699,4,1,1000));
+y1 = rand(Float32, (699,1,2,1000));
+y2 = rand(Float32, (1,1,2, 1000));
 
 y = [y1,y2,y1,y2];
 
 
-data = minibatch(x, y; batchsize=Int32(20));
+data = minibatch(x, y; batchsize=Int32(100));
 
 seqLen = size(x, 1)
 tasks = ["LNCaP.dht.AR", "LNCaP.veh.AR"]
@@ -58,8 +58,6 @@ for task in tasks
     println("countHead")
     bpnet(profileHead, countHead)
 end
-
-
 
 
 bpnet(data)
