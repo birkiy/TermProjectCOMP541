@@ -10,20 +10,17 @@ snakemake \
 # snakemake version: 5.26.1
 
 snakemake \
-  --snakefile code/Snakefile \
-  --configfile code/config.yaml \
+  --snakefile Snakefile \
+  --configfile config.yaml \
   -j100 \
-  --cluster-config code/cluster.yaml  \
+  --cluster-config cluster.yaml  \
   --rerun-incomplete \
   --use-conda \
   --cluster "sbatch \
       -A {cluster.partition} \
       -c {cluster.c} \
       -t {cluster.time} \
-      --mem {cluster.mem} \
-      --output 'slurms/%j.out' \
-      --error 'slurms/%j.err'"
-
+      --mem {cluster.mem}"
 
 
 snakemake \

@@ -51,28 +51,41 @@ function addHead!(c::Chain, h...)
     c.n = length(c.heads)
 end
 
-(c::Chain)(x) = [
-    h(c.body(x))
-    for h in c.heads
-]
+##########################################
 
 
-(c::Chain)(x, y) = [
-    @diff h.lossF(p, y)
-    for (h, y, p) in zip(c.heads, y, c(x))
-]
+function meanLoss(c::Chain, d::Data)
+    J = [Float32(0) for n in 1:c.n]
+    for (j, (x, y)) in enumerate(d)
+        for (hIdx, (h, yi)) in enumerate(zip(c.heads, y))
+            J[hIdx] += h.lossF(h(c.body(x)), yi)
+        end
+    end
+    J ./ length(d)
+end
 
 
+every(n,itr) = (x for (i,x) in enumerate(itr) if i%n == 0)
 
-(c::Chain)(data::Data) =
-    sum(
-        [
-            l[i]
-            for l in
-                [
-                    c(d...)
-                    for d in data
-                ],
-            i in 1:4
-        ], dims=1
-        ) / length(data)
+function train!(c::Chain, dTrn::Data, dTst::Data; iters=50, period=10)
+    lossTrn, lossTst = [], []
+    for i=1:period:iters
+        println("epoch start")
+        push!(lossTrn, meanLoss(c, dTrn))
+        push!(lossTst, meanLoss(c, dTst))
+        for (x, y) in every(period, dTrn)
+            for (h, yi) in zip(c.heads, y)
+                J = @diff h.lossF(h(c.body(x)), yi)
+                println(J)
+                for p in params(J)
+                    ∇p = grad(J, p)
+                    update!(p, ∇p)
+                end
+            end
+        end
+        println(sum.(lossTrn), sum.(lossTst))
+        println("epoch end")
+        println()
+    end
+    return (lossTrn, lossTst)
+end
