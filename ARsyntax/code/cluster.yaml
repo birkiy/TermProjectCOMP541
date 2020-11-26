@@ -13,5 +13,8 @@
   "peakCalling" : {"c" :2, "mem":"20G"},
   "SignalAt5end" : {"c" :2, "mem":"160G"},
   "idr" : {"c" :2, "mem":"20G"},
-  "coverageAroundSummits" : {"c" :32, "mem":"320G"}
+  "coverageAroundSummits" : {"c" :32, "mem":"320G"},
+  "getFastaRule" : {"c" :2, "mem":"160G"},
+  "getAllRegionsRule" : {"c" :20, "mem":"200G"},
+  "getRegionsRule" : {"c" :20, "mem":"200G"}
 }

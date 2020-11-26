@@ -1,0 +1,12 @@
+name: ChipAtlas
+channels:
+- bioconda
+- pytorch
+- conda-forge
+- defaults
+- anaconda
+
+dependencies:
+- python=3.8
+- snakemake=5.26.1
+-

@@ -1,0 +1,49 @@
+
+config: "code/config.yaml"
+
+
+from configPY import *
+
+
+
+
+# create a list of sample list with interested output file names
+# and give it to target rule as desiredOutputList
+# you are free to give directories too.
+
+
+
+rule all:
+    input:
+        expand("{desiredOutput}",
+        desiredOutput=desiredOutputList)
+
+
+
+# raw
+include: "raw/rule.ParallelFastqDump.parallel-fastq-dump.smk"
+include: "raw/rule.Links.smk"
+include: "raw/rule.SRAprefetch.smk"
+include: "raw/rule.ConcatFastq.smk"
+
+
+# mapping
+include: "mapping/rule.MappingBowtie2.smk"
+include: "mapping/rule.BamProcess.samtools.smk"
+include: "mapping/rule.Pool.samtools.smk"
+
+# bigwig
+include: "bigwig/rule.GenerateBigWig.bedtools.smk"
+include: "bigwig/rule.GenerateBigWigBamCom.deeptools.smk"
+
+# plots
+include: "plots/rule.MultiSummaryBam.deeptools.smk"
+include: "plots/rule.plot.PlotCorrelation.deeptools.smk"
+include: "plots/rule.plot.PlotFingerprint.deeptools.smk"
+
+
+ruleorder:
+    SRAprefetch > ConcatFastq > Links > ParallelFastqDump >
+    Pool > MappingBowtie2 > BamProcess  >
+    GenerateBigWig  > MultiBamSummary > PlotCorrelation > PlotFingerprint
+# GenerateBigWigBamCom

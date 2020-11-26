@@ -1,0 +1,15 @@
+
+{
+    "hg19" :
+        {
+            "fasta" : "/home/ualtintas/genomeAnnotations/hg19.fa",
+            "idx" :
+                {
+                    "bowtie2" : "/home/ualtintas/genomeAnnotations/hg19.bowtie2.idx/hg19",
+                    "bowtie" : "/home/ualtintas/genomeAnnotations/hg19.bowtie.idx/hg19",
+                    "bwa" : "/home/ualtintas/genomeAnnotations/hg19.bowtie.idx/hg19"
+                },
+            "chrSize" : "/home/ualtintas/genomeAnnotations/hg19.chrom.sizes",
+            "blacklist" : "/home/ualtintas/genomeAnnotations/hg19-blacklist.bed"
+        }
+}

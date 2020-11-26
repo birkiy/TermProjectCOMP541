@@ -67,25 +67,56 @@ end
 
 every(n,itr) = (x for (i,x) in enumerate(itr) if i%n == 0)
 
-function train!(c::Chain, dTrn::Data, dTst::Data; iters=50, period=10)
-    lossTrn, lossTst = [], []
+# function train!(c::Chain, dTrn::Data, dTst::Data; iters=50, period=10)
+#     lossTrn, lossTst = [], []
+#     for i=1:period:iters
+#         println("epoch start")
+#         push!(lossTrn, meanLoss(c, dTrn))
+#         push!(lossTst, meanLoss(c, dTst))
+#         for (x, y) in every(period, dTrn)
+#             for (h, yi) in zip(c.heads, y)
+#                 J = @diff h.lossF(h(c.body(x)), yi)
+#                 println(J)
+#                 for p in params(J)
+#                     ∇p = grad(J, p)
+#                     update!(p, ∇p)
+#                 end
+#             end
+#         end
+#         println(sum.(lossTrn), sum.(lossTst))
+#         println("epoch end")
+#         println()
+#     end
+#     return (lossTrn, lossTst)
+# end
+
+function train!(c::Chain, dTrn::Data, dTst::Data; iters=500, period=10)
+    results = []
     for i=1:period:iters
-        println("epoch start")
-        push!(lossTrn, meanLoss(c, dTrn))
-        push!(lossTst, meanLoss(c, dTst))
+        push!(
+            results, (
+                c(dTrn),
+                c(dTst),
+                1-accuracy(c; data=dTrn),
+                1-accuracy(c; data=dTst)
+            )
+        )
         for (x, y) in every(period, dTrn)
-            for (h, yi) in zip(c.heads, y)
-                J = @diff h.lossF(h(c.body(x)), yi)
-                println(J)
-                for p in params(J)
-                    ∇p = grad(J, p)
-                    update!(p, ∇p)
-                end
+            J = @diff c(x, y)
+            for p in params(J)
+                ∇p = grad(J, p)
+                update!(p, ∇p)
             end
         end
-        println(sum.(lossTrn), sum.(lossTst))
-        println("epoch end")
-        println()
     end
-    return (lossTrn, lossTst)
+    push!(
+        results, (
+            c(dTrn),
+            c(dTst),
+            1-accuracy(c; data=dTrn),
+            1-accuracy(c; data=dTst)
+        )
+    )
+    results = reshape(collect(Float32,flatten(results)),(4,:))
+    return 0:period:iters, results
 end

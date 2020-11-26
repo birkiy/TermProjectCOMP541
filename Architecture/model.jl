@@ -1,12 +1,12 @@
 
 
-using Knet: conv4, param, param0, dropout, deconv4, pool, mat, relu, Adam, KnetArray, Param, nll, adam!, progress!, update!
+using Knet: conv4, param, param0, dropout, deconv4, pool, mat, relu, Adam, KnetArray, Param, nll, adam!, progress!, update!, accuracy
 
 using AutoGrad: @diff, params, grad
 
 include("data.jl")
 include("loss.jl")
-#include("arch.jl")
+include("arch.jl")
 include("layers.jl")
 
 
@@ -60,6 +60,8 @@ for task in tasks
 end
 
 
+[l.nParameters for l in collect(bpnet.body.layers)]
+[l.nParameters for h in collect(bpnet.heads) for l in h.layers]
 
 
 x = rand(Float32, (699,4,1,300));
@@ -74,6 +76,12 @@ dTst = minibatch(x, y; batchsize=Int32(100));
 
 
 train!(bpnet, dTrn, dTst)
+
+
+################################################################################
+
+
+
 
 
 

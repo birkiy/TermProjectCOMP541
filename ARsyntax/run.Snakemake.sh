@@ -10,10 +10,10 @@ snakemake \
 # snakemake version: 5.26.1
 
 snakemake \
-  --snakefile Snakefile \
-  --configfile config.yaml \
+  --snakefile code/Snakefile \
+  --configfile code/config.yaml \
   -j100 \
-  --cluster-config cluster.yaml  \
+  --cluster-config code/cluster.yaml  \
   --rerun-incomplete \
   --use-conda \
   --cluster "sbatch \

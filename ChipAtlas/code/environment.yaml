@@ -1,0 +1,25 @@
+name: ChipAtlas
+channels:
+- bioconda
+- pytorch
+- conda-forge
+- defaults
+- anaconda
+
+dependencies:
+- python=3.8
+- snakemake=5.26.1
+- ucsc-liftover=377
+- ucsc-bigwigtobedgraph=377
+- ucsc-bedgraphtobigwig=377
+- ucsc-bigWigAverageOverBed=377
+- ucsc-bedRemoveOverlap=377
+- bedtools=2.29.2
+- deeptools=3.5.0
+- samtools=1.11
+- bedtools=2.29.2
+- parallel-fastq-dump=0.6.6
+- bowtie2=2.4.2
+- scikit-learn=0.23.2
+- seaborn=0.11.0
+- julia=1.5.2
